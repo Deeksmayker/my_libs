@@ -24,7 +24,7 @@ void test_str1(){
     printf("test_str1 cool!\n");
     
     str.free_str();
-    free_str_array(&splited);
+    free_string_array(&splited);
 }
 
 void test_files1(){
@@ -47,7 +47,7 @@ void test_files1(){
     
     printf("test_files1 cool!\n");
     
-    free_str_array(&splited);
+    free_string_array(&splited);
     unload_file(&test_file);
 }
 

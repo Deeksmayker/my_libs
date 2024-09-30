@@ -43,7 +43,7 @@ File load_file(const char *name, const char *mode){
 }
 
 void unload_file(File *file){
-    free_str_array(&file->lines);
+    free_string_array(&file->lines);
     free(file->name);
 }
 

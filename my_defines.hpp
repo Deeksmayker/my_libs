@@ -1,7 +1,5 @@
 #pragma once
 
-#define _CRT_SECURE_NO_DEPRECATE
-
 typedef float  f32;
 typedef double f64;
 //#define _CRT_SECURE_NO_WARNINGS

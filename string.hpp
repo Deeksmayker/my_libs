@@ -30,7 +30,20 @@ void str_copy(char *dest, const char *source){
     // }
 }
 
-b32 str_cmp(char *first, char *second){
+// b32 str_cmp(char *first, char *second){
+//     int len1 = str_len(first);
+//     int len2 = str_len(second);
+    
+//     if (len1 != len2) return false;
+    
+//     for (int i = 0; i < len1; i++){
+//         if (first[i] != second[i]) return false;
+//     }
+    
+//     return true;
+// }
+
+b32 str_cmp(char *first, const char *second){
     int len1 = str_len(first);
     int len2 = str_len(second);
     

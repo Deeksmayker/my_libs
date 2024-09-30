@@ -46,7 +46,7 @@ struct Array{
         }
         
         // T* element = get(count);
-        // memmove(element, value, sizeof(T));
+        // mem_copy(element, value, sizeof(T));
         data[count] = value;
         count++;
     }
@@ -55,7 +55,7 @@ struct Array{
         for (int i = index; i < count - 1; i++){
             T *current_element = get_ptr(i);
             T *next_element    = get_ptr(i + 1);
-            memmove(current_element, next_element, sizeof(T));
+            mem_copy(current_element, next_element, sizeof(T));
         }
         
         count--;
@@ -119,7 +119,7 @@ Array<String> split_str(String str, const char *separators, int separators_count
     return result;
 }
 
-void free_str_array(Array<String> *arr){
+void free_string_array(Array<String> *arr){
     for (int i = 0; i < arr->count; i++){
         arr->get_ptr(i)->free_str();
     }
