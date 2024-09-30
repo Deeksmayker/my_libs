@@ -112,10 +112,10 @@ void normalize(f32 *number){
     *number = -1;
 }
 
-// f32 abs(f32 number){
-//     if (number < 0) return -number;
-//     return number;
-// }
+f32 abs(f32 number){
+    if (number < 0) return -number;
+    return number;
+}
 
 i32 clamp(i32 value, i32 min, i32 max){
     if (value <= min){

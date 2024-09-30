@@ -30,6 +30,19 @@ void str_copy(char *dest, const char *source){
     // }
 }
 
+b32 str_cmp(char *first, char *second){
+    int len1 = str_len(first);
+    int len2 = str_len(second);
+    
+    if (len1 != len2) return false;
+    
+    for (int i = 0; i < len1; i++){
+        if (first[i] != second[i]) return false;
+    }
+    
+    return true;
+}
+
 struct String{
     String(const char *_data){  
         count = str_len(_data);
