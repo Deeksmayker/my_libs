@@ -84,9 +84,9 @@ struct Array{
     // }
 };
 
-Array<String> split_str(String str, const char *separators, int separators_count){
-    Array<String> result = Array<String>(10);
-    
+void split_str(String str, const char *separators, int separators_count, Array<String> *result){
+    result->clear();
+
     String current_string = String();
     
     for (int i = 0; i < str.count; i++){
@@ -103,7 +103,7 @@ Array<String> split_str(String str, const char *separators, int separators_count
         if (need_separate){
             if (current_string.count != 0){
                 String copied_string = String(&current_string);
-                result.add(copied_string);
+                result->add(copied_string);
                 
                 current_string.clear();
             }
@@ -113,8 +113,14 @@ Array<String> split_str(String str, const char *separators, int separators_count
     }
     
     if (current_string.count != 0){
-        result.add(current_string);
+        result->add(current_string);
     }
+}
+
+Array<String> split_str(String str, const char *separators, int separators_count){
+    Array<String> result = Array<String>(10);
+    
+    split_str(str, separators, separators_count, &result);
     
     return result;
 }

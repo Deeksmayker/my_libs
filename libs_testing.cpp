@@ -54,6 +54,8 @@ void test_files1(){
 global_variable b32 testing = true;
 
 int main(){
+    
+
     if (testing){
         test_str1();
         test_files1();

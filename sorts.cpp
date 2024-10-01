@@ -29,12 +29,6 @@ void bubble_sort(int *arr, int count){
         }
     }
 }
-
-#define print_arr(arr, arr_count) for (int i = 0; i < arr_count; i++) \
-                                  { \
-                                      printf("%d", arr[i]); \
-                                      if (i < arr_count - 1) printf(", "); \
-                                  }
                                   
 #define swap(arr, i, j) int tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
                                 
@@ -62,38 +56,12 @@ void q_sort(int *arr, int low, int high){
     q_sort(arr, partition_index + 1, high);
 }
 
-
 void sort(int *arr, int arr_count){
     q_sort(arr, 0, arr_count - 1);
 }
 
 int main(){
     const int count = 10000;
-    //int arr[count];
-    
-    // String str = String("[Aboba, chings] asdd");
-    // char separators[] = {'[', ']', ',', ' '};
-    // int separators_count = 4;
-    
-    // Array<String> splitted = split_str(str, separators, separators_count);
-    
-    // for (int i = 0; i < splitted.count; i++){
-    //     printf("%s\n", splitted.get(i).line);
-    // }
-    
-    // double a = 1;
-    
-    // int i = 0;
-    
-    // while (i < 100000){
-    //     if (a <= 0){
-    //         a = 1;
-    //     }
-    
-    //     a *= 2;
-    //     printf("i = %f: %d\n", i, a);
-    //     i++;
-    //}
     
     printf("NULL: %p\n", NULL);
 }
