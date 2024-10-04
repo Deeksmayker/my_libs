@@ -52,11 +52,18 @@ struct Array{
     }
     
     void remove(int index){
-        for (int i = index; i < count - 1; i++){
-            T *current_element = get_ptr(i);
-            T *next_element    = get_ptr(i + 1);
-            mem_copy(current_element, next_element, sizeof(T));
+        if (index == count - 1){
+            count--;
+            return;
         }
+    
+        for (int i = index; i < count - 1; i++){
+            // T *current_element = get_ptr(i);
+            // T *next_element    = get_ptr(i + 1);
+            mem_copy(get_ptr(i), get_ptr(i+1), sizeof(T));
+        }
+        
+        //mem_copy(get_ptr(index), last_ptr(), sizeof(T));
         
         count--;
     }
