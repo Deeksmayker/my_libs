@@ -7,14 +7,14 @@ struct File{
     //When we will need to keep file open this will be changed
     //FILE *fptr;
     char *name;
-    Array<String> lines;
+    Dynamic_Array<String> lines;
 };
 
 File load_file(const char *name, const char *mode){
     File file;
     file.name = (char*)malloc(str_len(name) * sizeof(char));
     str_copy(file.name, name);
-    file.lines = Array<String>(8);
+    file.lines = Dynamic_Array<String>(8);
     
     FILE *fptr = fopen(name, mode);
     

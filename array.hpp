@@ -3,18 +3,18 @@
 #include <string.h>
 
 template<typename T>
-struct Array{
+struct Dynamic_Array{
     T *data;
     int count = 0;
     int max_count = 0;
 
-    Array(int _max_count){
+    Dynamic_Array(int _max_count){
         max_count = _max_count;
         count = 0;
         data = (T*)malloc(_max_count * sizeof(T));
     }
     
-    Array(){
+    Dynamic_Array(){
         max_count = 1;
         count = 0;
         data = (T*)malloc(max_count * sizeof(T));
@@ -98,12 +98,12 @@ struct Array{
 };
 
 template<typename T, int C>
-struct Stack_Array{
+struct Array{
     T data[C];
     int count = 0;
     int max_count = 0;
 
-    Stack_Array(){
+    Array(){
         max_count = C;
         count = 0;
     }
@@ -146,7 +146,7 @@ struct Stack_Array{
 };
 
 template<typename T>
-void copy_array(Array<T> *dest, Array<T> *src){
+void copy_array(Dynamic_Array<T> *dest, Dynamic_Array<T> *src){
     //*dest = *src;
     dest->clear();
     
@@ -158,7 +158,7 @@ void copy_array(Array<T> *dest, Array<T> *src){
     //mem_copy(dest->data, src->data, dest->count * sizeof(T));
 }
 
-void split_str(String str, const char *separators, int separators_count, Array<String> *result){
+void split_str(String str, const char *separators, int separators_count, Dynamic_Array<String> *result){
     result->clear();
 
     String current_string = String();
@@ -191,15 +191,15 @@ void split_str(String str, const char *separators, int separators_count, Array<S
     }
 }
 
-Array<String> split_str(String str, const char *separators, int separators_count){
-    Array<String> result = Array<String>(10);
+Dynamic_Array<String> split_str(String str, const char *separators, int separators_count){
+    Dynamic_Array<String> result = Dynamic_Array<String>(10);
     
     split_str(str, separators, separators_count, &result);
     
     return result;
 }
 
-void free_string_array(Array<String> *arr){
+void free_string_array(Dynamic_Array<String> *arr){
     for (int i = 0; i < arr->count; i++){
         arr->get_ptr(i)->free_str();
     }
