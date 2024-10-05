@@ -9,10 +9,19 @@ size_t str_len(const char *line){
     return result;
 }
 
-void mem_copy(void *dest, void *source, size_t bytes){
+void mem_copy_back(void *dest, void *source, size_t bytes){
     char *new_dest   = (char*)dest;
     char *new_source = (char*)source;
     for (int i = bytes - 1; i >= 0; --i){
+        new_dest[i] = new_source[i];
+        //printf("%s\n", new_dest[i]);
+    }
+}
+
+void mem_copy(void *dest, void *source, size_t bytes){
+    char *new_dest   = (char*)dest;
+    char *new_source = (char*)source;
+    for (int i = 0; i < bytes; i++){
         new_dest[i] = new_source[i];
         //printf("%s\n", new_dest[i]);
     }

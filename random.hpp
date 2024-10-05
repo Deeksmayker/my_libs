@@ -36,3 +36,8 @@ f32 rnd(f32 min, f32 max){
 f32 rnd01(){
     return rnd(0.0f, 1.0f);
 }
+
+Vector2 rnd_on_circle(){
+    f32 theta = rnd01() * 2 * PI;
+    return {cosf(theta), sinf(theta)};
+}

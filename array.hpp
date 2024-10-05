@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string.h>
+
 template<typename T>
 struct Array{
     T *data;
@@ -57,11 +59,15 @@ struct Array{
             return;
         }
     
-        for (int i = index; i < count - 1; i++){
-            // T *current_element = get_ptr(i);
-            // T *next_element    = get_ptr(i + 1);
-            mem_copy(get_ptr(i), get_ptr(i+1), sizeof(T));
-        }
+        // for (int i = index; i < count - 1; i++){
+        //     // T *current_element = get_ptr(i);
+        //     // T *next_element    = get_ptr(i + 1);
+        //     //mem_copy(get_ptr(i), get_ptr(i+1), sizeof(T));
+            
+            
+        // }
+        
+        memmove(get_ptr(index), get_ptr(index+1), sizeof(T) * (count - index - 1));
         
         //mem_copy(get_ptr(index), last_ptr(), sizeof(T));
         

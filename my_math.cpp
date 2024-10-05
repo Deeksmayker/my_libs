@@ -232,7 +232,9 @@ f32 fangle(Vector2 v){
 // }
 
 void normalize(Vector2 *vector){
-    *vector = divide(*vector, magnitude(*vector));
+    //*vector = divide(*vector, magnitude(*vector));
+    *vector = normalized(*vector);
+    //*vector /= magnitude(*vector);
 }
 
 float lerp(float a, float b, float t){
