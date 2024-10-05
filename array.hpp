@@ -97,6 +97,67 @@ struct Array{
     // }
 };
 
+template<typename T, int C>
+struct Stack_Array{
+    T data[C];
+    int count = 0;
+    int max_count = 0;
+
+    Stack_Array(){
+        max_count = C;
+        count = 0;
+    }
+    
+    T get(int index){
+        return data[index];
+    }
+    
+    T* get_ptr(int index){
+        return &data[index];
+    }
+    
+    void add(T value){
+        assert(count < max_count);     
+        
+        data[count++] = value;
+    }
+    
+    void remove(int index){
+        if (index == count - 1){
+            count--;
+            return;
+        }
+        
+        memmove(get_ptr(index), get_ptr(index+1), sizeof(T) * (count - index - 1));
+        count--;
+    }
+    
+    T last(){
+        return data[count-1];
+    }
+    
+    T* last_ptr(){
+        return &data[count-1];
+    }
+    
+    void clear(){
+        count = 0;
+    }
+};
+
+template<typename T>
+void copy_array(Array<T> *dest, Array<T> *src){
+    //*dest = *src;
+    dest->clear();
+    
+    for (int i = 0; i < src->count; i++){
+        dest->add(src->get(i));
+    }
+    
+    //dest->data = (T*)malloc(dest->count * sizeof(T));
+    //mem_copy(dest->data, src->data, dest->count * sizeof(T));
+}
+
 void split_str(String str, const char *separators, int separators_count, Array<String> *result){
     result->clear();
 

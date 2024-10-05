@@ -56,7 +56,7 @@ b32 str_cmp(char *first, const char *second){
     int len1 = str_len(first);
     int len2 = str_len(second);
     
-    if (len1 != len2) return false;
+    if (len1 != len2 || len1 == 0) return false;
     
     for (int i = 0; i < len1; i++){
         if (first[i] != second[i]) return false;
