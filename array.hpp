@@ -132,6 +132,26 @@ struct Array{
         count--;
     }
     
+    void remove_first_half(){
+        int half_count = (int)((float)count * 0.5f);
+        int even_correction = count % 2 == 0 ? -1 : 0;
+        mem_copy(get_ptr(0), get_ptr(half_count + even_correction), half_count * sizeof(T));
+        
+        count = half_count;
+    }
+    
+    T pop(){
+        assert(count > 0);
+    
+        return data[--count];
+    }
+    
+    T* pop_ptr(){
+        assert(count > 0);
+    
+        return &data[--count];
+    }
+    
     T last(){
         return data[count-1];
     }
