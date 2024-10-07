@@ -7,6 +7,8 @@
 #define RAD2DEG (180.0f/PI)
 #define EPSILON 0.000001f
 
+//#define VECTOR2_ARR_FILL_ZERO (arr, count) for (int ii = 0; ii < count; ii++) arr[ii] = {0, 0}
+
 struct Vector2{
     f32 x;
     f32 y;

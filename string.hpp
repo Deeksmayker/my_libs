@@ -39,6 +39,23 @@ void str_copy(char *dest, const char *source){
     // }
 }
 
+b32 str_start_with(char *str, char *start_with){
+    int len = str_len(str);
+    int start_with_len = str_len(start_with);
+    
+    if (start_with_len > len){
+        return false;
+    }
+    
+    for (int i = 0; i < start_with_len; i++){
+        if (str[i] != start_with[i]){
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 // b32 str_cmp(char *first, char *second){
 //     int len1 = str_len(first);
 //     int len2 = str_len(second);
