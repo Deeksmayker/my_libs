@@ -166,6 +166,115 @@ struct Array{
 };
 
 template<typename T>
+struct Table_Data{
+    int key = -1;
+    T value;
+};
+
+template<typename T>
+struct Hash_Table_Int{
+    Table_Data<T> *data;
+    //int count = 0;
+    int max_count = 10000;
+    
+    int last_added_key = -1;
+
+    Hash_Table_Int(){
+        max_count = 10000;
+        
+        data = (Table_Data<T>*)malloc(max_count * sizeof(Table_Data<T>));
+
+        for (int i = 0; i < max_count; i++) {
+            data[i].key = -1;
+        }
+        //count = 0;
+    }
+    
+    b32 has_key(int key){
+        if (key == -1){
+            return false;
+        }
+    
+        return data[key%max_count].key != -1;
+    }
+    
+    b32 has_index(int index){
+        if (index == -1){
+            return false;
+        }
+    
+        return data[index].key != -1;
+    }
+    
+    void remove_key(int key){
+        data[key%max_count].key = -1;
+    }
+    
+    void remove_index(int index){
+        data[index].key = -1;
+    }
+    
+    T get(int index){
+        return data[index].value;
+    }
+    
+    T* get_ptr(int index){
+        return &data[index].value;
+    }
+    
+    T get_by_key(int key){
+        return data[key%max_count].value;
+    }
+    
+    T* get_by_key_ptr(int key){
+        return &data[key%max_count].value;
+    }
+    
+    void add(int key, T value){
+        //assert(count < max_count);     
+        assert(!has_key(key));        
+        
+        print(key);
+        
+        data[key%max_count].value = value;
+        data[key%max_count].key = key;
+        
+        last_added_key = key;
+    }
+    
+    T pop(){
+        assert(count > 0);
+    
+        return data[--count];
+    }
+    
+    T* pop_ptr(){
+        assert(count > 0);
+    
+        return &data[--count];
+    }
+    
+    T last(){
+        return data[last_added_key%max_count].value;
+    }
+    
+    T* last_ptr(){
+        return &data[last_added_key%max_count].value;
+    }
+    
+    void clear(){
+        //count = 0;
+        
+        for (int i = 0; i < max_count; i++){
+            if (data[i].key != -1){
+                data[i].key = -1;
+            }
+        }
+    }
+};
+
+
+template<typename T>
 void copy_array(Dynamic_Array<T> *dest, Dynamic_Array<T> *src){
     //*dest = *src;
     dest->clear();

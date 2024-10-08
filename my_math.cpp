@@ -208,6 +208,22 @@ Vector2 normalized(Vector2 vector){
     return divide(vector, len);
 }
 
+void clamp_magnitude(Vector2 *vec, f32 max_magnitude){
+    f32 mag = magnitude(*vec);
+    if (mag > max_magnitude){
+        *vec = normalized(*vec) * max_magnitude;   
+    }
+}
+
+Vector2 clamp_magnitude(Vector2 vec, f32 max_magnitude){
+    f32 mag = magnitude(vec);
+    if (mag > max_magnitude){
+        vec = normalized(vec) * max_magnitude;   
+    }
+    
+    return vec;
+}
+
 f32 dot(Vector2 v1, Vector2 v2){
     f32 result = (v1.x*v2.x + v1.y*v2.y);
 
@@ -237,6 +253,18 @@ void normalize(Vector2 *vector){
     //*vector = divide(*vector, magnitude(*vector));
     *vector = normalized(*vector);
     //*vector /= magnitude(*vector);
+}
+
+Vector2 reflected_vector(Vector2 vec, Vector2 normal){
+    Vector2 result = { 0 };
+
+    float dot_product = dot(vec, normal);//(v.x*normal.x + v.y*normal.y); // Dot product
+
+    result.x = vec.x - (2.0f*normal.x)*dot_product;
+    result.y = vec.y - (2.0f*normal.y)*dot_product;
+
+    return result;
+
 }
 
 float lerp(float a, float b, float t){
@@ -369,4 +397,27 @@ f32 EaseInQuint(f32 x){
 
 f32 EaseInSine(f32 x){
   return 1.0f - cos((x * PI) / 2.0f);
+}
+
+f32 EaseInBack(f32 x) {
+    f32 c1 = 1.70158f;
+    f32 c3 = c1 + 1.0f;
+    
+    return c3 * x * x * x - c1 * x * x;
+}
+
+f32 EaseOutBack(f32 x) {
+    f32 c1 = 1.70158f;
+    f32 c3 = c1 + 1.0f;
+    
+    return 1.0f + c3 * pow(x - 1.0f, 3.0f) + c1 * pow(x - 1.0f, 2.0f);
+}
+
+f32 EaseInOutBack(f32 x) {
+    f32 c1 = 1.70158f;
+    f32 c2 = c1 * 1.525f;
+    
+    return x < 0.5
+      ? (pow(2.0f * x, 2.0f) * ((c2 + 1.0f) * 2.0f * x - c2)) / 2.0f
+      : (pow(2.0f * x - 2.0f, 2.0f) * ((c2 + 1.0f) * (x * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
 }
