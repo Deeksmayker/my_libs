@@ -175,8 +175,8 @@ template<typename T>
 struct Hash_Table_Int{
     Table_Data<T> *data;
     //int count = 0;
-    int max_count = 10000;
-    
+    int max_count = 1000;
+    int total_added_count = 0;
     int last_added_key = -1;
 
     Hash_Table_Int(){
@@ -227,6 +227,10 @@ struct Hash_Table_Int{
     }
     
     T* get_by_key_ptr(int key){
+        if (!has_key(key)){
+            return NULL;
+        }
+
         return &data[key%max_count].value;
     }
     
@@ -234,12 +238,11 @@ struct Hash_Table_Int{
         //assert(count < max_count);     
         assert(!has_key(key));        
         
-        print(key);
-        
         data[key%max_count].value = value;
         data[key%max_count].key = key;
         
         last_added_key = key;
+        total_added_count++;
     }
     
     T pop(){
