@@ -179,7 +179,7 @@ struct Hash_Table_Int{
     int total_added_count = 0;
     int last_added_key = -1;
 
-    Hash_Table_Int(){
+    Hash_Table_Int(int count = 10000){
         max_count = 10000;
         
         data = (Table_Data<T>*)malloc(max_count * sizeof(Table_Data<T>));
@@ -198,6 +198,14 @@ struct Hash_Table_Int{
         return data[key%max_count].key != -1;
     }
     
+    b32 has_key(i64 key){
+        if (key == -1){
+            return false;
+        }
+    
+        return data[key%max_count].key != -1;
+    }
+    
     b32 has_index(int index){
         if (index == -1){
             return false;
@@ -207,6 +215,10 @@ struct Hash_Table_Int{
     }
     
     void remove_key(int key){
+        data[key%max_count].key = -1;
+    }
+    
+    void remove_key(i64 key){
         data[key%max_count].key = -1;
     }
     
@@ -234,15 +246,34 @@ struct Hash_Table_Int{
         return &data[key%max_count].value;
     }
     
-    void add(int key, T value){
+    b32 add(int key, T value){
         //assert(count < max_count);     
-        assert(!has_key(key));        
+        //assert(!has_key(key));        
+        if (has_key(key)){
+            return false;
+        }
         
         data[key%max_count].value = value;
         data[key%max_count].key = key;
         
         last_added_key = key;
         total_added_count++;
+        return true;
+    }
+    
+    b32 add(i64 key, T value){
+        //assert(count < max_count);     
+        //assert(!has_key(key));        
+        if (has_key(key)){
+            return false;
+        }
+        
+        data[key%max_count].value = value;
+        data[key%max_count].key = key;
+        
+        last_added_key = key;
+        total_added_count++;
+        return true;
     }
     
     T pop(){
@@ -290,10 +321,53 @@ void copy_array(Dynamic_Array<T> *dest, Dynamic_Array<T> *src){
     //mem_copy(dest->data, src->data, dest->count * sizeof(T));
 }
 
-void split_str(String str, const char *separators, int separators_count, Dynamic_Array<String> *result){
+void split_str(char *str, const char *separators, Dynamic_Array<Medium_Str> *result){
     result->clear();
 
-    String current_string = String();
+    size_t len = str_len(str);
+    size_t separators_len = str_len(separators);
+    
+    int start_index = 0;
+    int current_index = 0;
+    
+    for (int i = 0; i < len; i++){
+        char ch = str[i];
+        
+        int need_separate = 0;
+        for (int s = 0; s < separators_len; s++){
+            if (ch == separators[s]){
+                need_separate = 1;
+                break;
+            }
+        }
+        
+        if (need_separate){
+            if (current_index - start_index != 0){
+                result->add({});
+                mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
+                
+                start_index = current_index + 1;
+            }
+        }// else{
+           // current_index++;
+        //}
+        current_index++;
+    }
+    
+    if (current_index - start_index != 0){
+        result->add({});
+        mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
+    }
+}
+
+void split_str(String str, const char *separators, int separators_count, Dynamic_Array<String> *result){
+    for (int i = 0; i < result->count; i++){
+        result->get_ptr(i)->free_str();
+    }
+
+    result->clear();
+
+    String current_string = init_string();
     
     for (int i = 0; i < str.count; i++){
         char ch = str.data[i];
@@ -308,7 +382,7 @@ void split_str(String str, const char *separators, int separators_count, Dynamic
         
         if (need_separate){
             if (current_string.count != 0){
-                String copied_string = String(&current_string);
+                String copied_string = copy_string(&current_string);
                 result->add(copied_string);
                 
                 current_string.clear();

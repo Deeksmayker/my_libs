@@ -368,6 +368,17 @@ int lerp_gradient(Gradient gradient, float fraction){
     return lerp_colors(gradient.colors, gradient.colors_count, fraction);
 }
 
+//Hash functions
+i64 hash_str(char *line){
+    i64 hash = 5381;
+    int c;
+
+    while ((c = *line++)){
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+    }
+
+    return hash;
+}
 
 //Ease functions
 float EaseInOutQuad(float x){

@@ -13,18 +13,26 @@
 #include "files.hpp"
 
 void test_str1(){
-    String str = String("Chtoto\naboba\nwow!!!\n");
+    String str = init_string_from_str("Cht oto\nab{ob}a\nw|ow!!!\n");
     
-    Array<String> splited = split_str(str, "\n", 1);
+    //Dynamic_Array<String> splited = split_str(str, "\n", 1);
+    Dynamic_Array<Medium_Str> splitted = Dynamic_Array<Medium_Str>(16);
     
-    assert(splited.data[0] == "Chtoto");
-    assert(splited.data[1] == "aboba");
-    assert(splited.data[2] == "wow!!!");
+    split_str(str.data, "\n {}|", &splitted);
+    
+    assert(str_cmp(splitted.get(0).data, "Cht"));
+    assert(str_cmp(splitted.get(1).data, "oto"));
+    assert(str_cmp(splitted.get(2).data, "ab"));
+    assert(str_cmp(splitted.get(3).data, "ob"));
+    assert(str_cmp(splitted.get(4).data, "a"));
+    assert(str_cmp(splitted.get(5).data, "w"));
+    assert(str_cmp(splitted.get(6).data, "ow!!!"));
     
     printf("test_str1 cool!\n");
     
     str.free_str();
-    free_string_array(&splited);
+    //free_string_array(&splitted);
+    splitted.free_arr();
 }
 
 void test_files1(){
@@ -33,7 +41,7 @@ void test_files1(){
     int test_arr[][10] = {{123, 543, 65, 23, 54}, {534, 12, 32, 54, 5, 6, 7, 8}};
     //int text_arr2[] = {534, 12, 32, 54, 5, 6, 7, 8};
     
-    Array<String> splited = Array<String>(16);
+    Dynamic_Array<String> splited = Dynamic_Array<String>(16);
     
     for (int i = 0; i < test_file.lines.count; i++){
         splited = split_str(test_file.lines.get(i), "[, ]", 4);
@@ -54,8 +62,6 @@ void test_files1(){
 global_variable b32 testing = true;
 
 int main(){
-    
-
     if (testing){
         test_str1();
         test_files1();
