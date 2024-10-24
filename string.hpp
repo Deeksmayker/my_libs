@@ -293,3 +293,9 @@ String copy_string(String *str_to_copy){
 struct Medium_Str{
     char data[MEDIUM_STR_LEN];  
 };
+
+#define LONG_STR_LEN 2048
+
+struct Long_Str{
+    char data[LONG_STR_LEN];  
+};

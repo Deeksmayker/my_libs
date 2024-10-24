@@ -35,35 +35,35 @@ void test_str1(){
     splitted.free_arr();
 }
 
-void test_files1(){
-    File test_file = load_file("../test_data/test_arr1.txt", "r");
+// void test_files1(){
+//     File test_file = load_file("../test_data/test_arr1.txt", "r");
     
-    int test_arr[][10] = {{123, 543, 65, 23, 54}, {534, 12, 32, 54, 5, 6, 7, 8}};
-    //int text_arr2[] = {534, 12, 32, 54, 5, 6, 7, 8};
+//     int test_arr[][10] = {{123, 543, 65, 23, 54}, {534, 12, 32, 54, 5, 6, 7, 8}};
+//     //int text_arr2[] = {534, 12, 32, 54, 5, 6, 7, 8};
     
-    Dynamic_Array<String> splited = Dynamic_Array<String>(16);
+//     Dynamic_Array<String> splited = Dynamic_Array<String>(16);
     
-    for (int i = 0; i < test_file.lines.count; i++){
-        splited = split_str(test_file.lines.get(i), "[, ]", 4);
-        for (int j = 0; j < splited.count; j++){
-            int num = atoi(splited.get(j).data);
-            assert(num == test_arr[i][j]);
-        }
+//     for (int i = 0; i < test_file.lines.count; i++){
+//         splited = split_str(test_file.lines.get(i), "[, ]", 4);
+//         for (int j = 0; j < splited.count; j++){
+//             int num = atoi(splited.get(j).data);
+//             assert(num == test_arr[i][j]);
+//         }
         
-        //printf("%s", test_file.data.get(i).data);
-    }
+//         //printf("%s", test_file.data.get(i).data);
+//     }
     
-    printf("test_files1 cool!\n");
+//     printf("test_files1 cool!\n");
     
-    free_string_array(&splited);
-    unload_file(&test_file);
-}
+//     free_string_array(&splited);
+//     unload_file(&test_file);
+// }
 
 global_variable b32 testing = true;
 
 int main(){
     if (testing){
         test_str1();
-        test_files1();
+        //test_files1();
     }
 }

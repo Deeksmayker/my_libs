@@ -327,6 +327,8 @@ void split_str(char *str, const char *separators, Dynamic_Array<Medium_Str> *res
     size_t len = str_len(str);
     size_t separators_len = str_len(separators);
     
+    char temp_str[MEDIUM_STR_LEN];
+    
     int start_index = 0;
     int current_index = 0;
     
@@ -343,22 +345,82 @@ void split_str(char *str, const char *separators, Dynamic_Array<Medium_Str> *res
         
         if (need_separate){
             if (current_index - start_index != 0){
-                result->add({});
-                mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
+                size_t added_len = (current_index - start_index);
+                assert(added_len < MEDIUM_STR_LEN - 1);
+            
+                mem_copy(temp_str, str + start_index, added_len * sizeof(char));
+                temp_str[added_len] = '\0';
                 
-                start_index = current_index + 1;
+                result->add({});
+                str_copy(result->last_ptr()->data, temp_str);
             }
-        }// else{
-           // current_index++;
-        //}
+            
+            start_index = current_index + 1;
+        }
+            
         current_index++;
     }
     
     if (current_index - start_index != 0){
+        size_t added_len = (current_index - start_index);
+        assert(added_len < MEDIUM_STR_LEN - 1);
+    
+        mem_copy(temp_str, str + start_index, added_len * sizeof(char));
+        temp_str[added_len] = '\0';
+        
         result->add({});
-        mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
+        str_copy(result->last_ptr()->data, temp_str);
+
+        // result->add({});
+        // mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
     }
 }
+
+// void split_str(char *str, const char *separators, Dynamic_Array<Long_Str> *result){
+//     result->clear();
+
+//     size_t len = str_len(str);
+//     size_t separators_len = str_len(separators);
+    
+//     int start_index = 0;
+//     int current_index = 0;
+    
+//     for (int i = 0; i < len; i++){
+//         char ch = str[i];
+        
+//         int need_separate = 0;
+//         for (int s = 0; s < separators_len; s++){
+//             if (ch == separators[s]){
+//                 need_separate = 1;
+//                 break;
+//             }
+//         }
+        
+//         if (need_separate){
+//             if (current_index - start_index != 0){
+//                 result->add({});
+                
+//                 assert((current_index - start_index
+                
+//                 char temp_str[LONG_STR_LEN];
+//                 mem_copy(temp_str, str + start_index, (current_index - start_index) * sizeof(char));
+//                 size_t temp_str_len = str_len(temp_str);
+//                 temp_str[temp_str_len] = '\0';
+//                 temp_str_len++;
+                
+//                 mem_copy(result->last_ptr()->data, temp_str, temp_str_len * sizeof(char));
+                
+//                 start_index = current_index + 1;
+//             }
+            
+//         current_index++;
+//     }
+    
+//     if (current_index - start_index != 0){
+//         result->add({});
+//         mem_copy(result->last_ptr()->data, str + start_index, (current_index - start_index) * sizeof(char));
+//     }
+// }
 
 void split_str(String str, const char *separators, int separators_count, Dynamic_Array<String> *result){
     for (int i = 0; i < result->count; i++){
