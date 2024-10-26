@@ -167,7 +167,7 @@ struct Array{
 
 template<typename T>
 struct Table_Data{
-    int key = -1;
+    i64 key = -1;
     T value;
 };
 
@@ -177,7 +177,7 @@ struct Hash_Table_Int{
     //int count = 0;
     int max_count = 1000;
     int total_added_count = 0;
-    int last_added_key = -1;
+    i64 last_added_key = -1;
 
     Hash_Table_Int(int count = 10000){
         max_count = 10000;
@@ -234,11 +234,11 @@ struct Hash_Table_Int{
         return &data[index].value;
     }
     
-    T get_by_key(int key){
+    T get_by_key(i64 key){
         return data[key%max_count].value;
     }
     
-    T* get_by_key_ptr(int key){
+    T* get_by_key_ptr(i64 key){
         if (!has_key(key)){
             return NULL;
         }
