@@ -95,20 +95,61 @@ b32 str_end_with(char *str, const char *end_with){
     return true;
 }
 
-// b32 str_cmp(char *first, char *second){
-//     int len1 = str_len(first);
-//     int len2 = str_len(second);
+b32 str_contains_const(const char *str, const char *contains){
+    size_t len = str_len(str);
+    size_t contains_len = str_len(contains);
     
-//     if (len1 != len2) return false;
+    size_t match_count = 0;
+    //b32 found_first_char = false;
     
-//     for (int i = 0; i < len1; i++){
-//         if (first[i] != second[i]) return false;
-//     }
+    if (contains_len > len){
+        return false;
+    }
     
-//     return true;
-// }
+    for (int i = 0; i < len && match_count < contains_len; i++){
+        if (match_count == 0 && len - i < contains_len){
+            return false;
+        }
+    
+        if (to_lower(str[i]) == to_lower(contains[match_count])){
+            match_count++;
+        } else{
+            //return false;
+            match_count = 0;
+        }
+    }    
+    
+    return match_count == contains_len;
+}
 
-b32 str_cmp(char *first, const char *second){
+b32 str_contains(char *str, char *contains){
+    return str_contains_const(str, contains);
+    // size_t len = str_len(str);
+    // size_t contains_len = str_len(contains);
+    
+    // size_t match_count = 0;
+    // //b32 found_first_char = false;
+    
+    // if (contains_len > len){
+    //     return false;
+    // }
+    
+    // for (int i = 0; i < len; i++){
+    //     if (match_count == 0 && len - i > contains_len){
+    //         return false;
+    //     }
+    
+    //     if (to_lower(str[i]) == to_lower(contains[match_count])){
+    //         match_count++;
+    //     } else if (match_count > 0){
+    //         return false;
+    //     }
+    // }    
+    
+    // return match_count == contains_len;
+}
+
+b32 str_equal(char *first, const char *second){
     int len1 = str_len(first);
     int len2 = str_len(second);
     
@@ -121,7 +162,7 @@ b32 str_cmp(char *first, const char *second){
     return true;
 }
 
-b32 str_cmp(char *first, char *second){
+b32 str_equal(char *first, char *second){
     int len1 = str_len(first);
     int len2 = str_len(second);
     
@@ -134,7 +175,7 @@ b32 str_cmp(char *first, char *second){
     return true;
 }
 
-b32 str_cmp(const char *first, char *second){
+b32 str_equal(const char *first, char *second){
     int len1 = str_len(first);
     int len2 = str_len(second);
     

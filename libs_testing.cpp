@@ -20,19 +20,45 @@ void test_str1(){
     
     split_str(str.data, "\n {}|", &splitted);
     
-    assert(str_cmp(splitted.get(0).data, "Cht"));
-    assert(str_cmp(splitted.get(1).data, "oto"));
-    assert(str_cmp(splitted.get(2).data, "ab"));
-    assert(str_cmp(splitted.get(3).data, "ob"));
-    assert(str_cmp(splitted.get(4).data, "a"));
-    assert(str_cmp(splitted.get(5).data, "w"));
-    assert(str_cmp(splitted.get(6).data, "ow!!!"));
+    assert(str_equal(splitted.get(0).data, "Cht"));
+    assert(str_equal(splitted.get(1).data, "oto"));
+    assert(str_equal(splitted.get(2).data, "ab"));
+    assert(str_equal(splitted.get(3).data, "ob"));
+    assert(str_equal(splitted.get(4).data, "a"));
+    assert(str_equal(splitted.get(5).data, "w"));
+    assert(str_equal(splitted.get(6).data, "ow!!!"));
     
     printf("test_str1 cool!\n");
     
     str.free_str();
     //free_string_array(&splitted);
     splitted.free_arr();
+}
+
+void test_str2(){
+    const char *str1 = "Ayou";
+    const char *contains1 = "you";
+    const char *contains2 = "u";
+    const char *contains3 = "ay";
+    const char *false_contains1 = "ao";
+    
+    const char *str2 = "block_base";
+    const char *str2_contains1 = "_base";
+    const char *str2_contains2 = "base";
+    const char *str2_contains3 = "ase";
+    const char *str2_contains4 = "se";
+    
+    assert(str_contains_const(str1, contains1));
+    assert(str_contains_const(str1, contains2));
+    assert(str_contains_const(str1, contains3));
+    assert(!str_contains_const(str1, false_contains1));
+    
+    assert(str_contains_const(str2, str2_contains1));
+    assert(str_contains_const(str2, str2_contains2));
+    assert(str_contains_const(str2, str2_contains3));
+    assert(str_contains_const(str2, str2_contains4));
+    
+    printf("test_str2 cool!\n");
 }
 
 // void test_files1(){
@@ -64,6 +90,7 @@ global_variable b32 testing = true;
 int main(){
     if (testing){
         test_str1();
+        test_str2();
         //test_files1();
     }
 }

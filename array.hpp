@@ -163,6 +163,16 @@ struct Array{
     void clear(){
         count = 0;
     }
+    
+    b32 contains(T to_found){
+        for (int i = 0; i < count; i++){
+            if (get(i) == to_found){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 };
 
 template<typename T>
@@ -474,3 +484,4 @@ void free_string_array(Dynamic_Array<String> *arr){
     
     arr->free_arr();
 }
+

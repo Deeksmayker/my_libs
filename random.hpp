@@ -41,3 +41,9 @@ Vector2 rnd_on_circle(){
     f32 theta = rnd01() * 2 * PI;
     return {cosf(theta), sinf(theta)};
 }
+
+Vector2 rnd_in_circle(){
+    f32 r = sqrtf(rnd01());
+    f32 theta = rnd01() * 2 * PI;
+    return {r * cosf(theta), r * sinf(theta)};
+}
