@@ -1,5 +1,15 @@
 #pragma once
 
+#define MEDIUM_STR_LEN 256
+#define MAX_TEMP_LINES 32
+
+global_variable char temp_lines[MAX_TEMP_LINES][MEDIUM_STR_LEN];
+global_variable int temp_line_index = 0;
+
+void increment_temp_line_index(){
+    temp_line_index = (temp_line_index + 1) % MAX_TEMP_LINES;   
+}
+
 size_t str_len(const char *line){
     size_t result = 0;   
     while (line[result]){
@@ -47,7 +57,7 @@ inline b32 is_digit(char ch){
     return ch >= 48 && ch <= 57;
 }
 
-b32 str_start_with(char *str, char *start_with){
+b32 str_start_with_const(const char *str, const char *start_with){
     int len = str_len(str);
     int start_with_len = str_len(start_with);
     
@@ -64,6 +74,30 @@ b32 str_start_with(char *str, char *start_with){
     return true;
 }
 
+b32 str_start_with(char *str, const char *start_with){
+    return str_start_with_const(str, start_with);
+}
+
+b32 str_start_with(const char *str, char *start_with){
+    return str_start_with_const(str, start_with);
+}
+
+b32 str_start_with(char *str, char *start_with){
+    return str_start_with_const(str, start_with);
+}
+
+int str_find(const char *line, char symbol){
+    size_t line_len = str_len(line);
+    
+    for (int i = 0; i < line_len; i++){
+        if (line[i] == symbol){
+            return i;
+        }
+    }
+    
+    return line_len;
+}
+
 void substring_after_line(char *line, const char *excluded){
     int start_index = 0;
     
@@ -76,6 +110,20 @@ void substring_after_line(char *line, const char *excluded){
     
     mem_copy(line, line + excluded_len, (line_len - excluded_len) * sizeof(char));
     line[line_len - excluded_len] = '\0';
+}
+
+char* get_substring_before_symbol(const char *line, char symbol){
+    int start_index = 0;
+    
+    char *buffer = temp_lines[temp_line_index];
+    
+    int line_len = str_len(line);
+    
+    mem_copy(buffer, (void*)line, str_find(line, symbol) * sizeof(char));
+    buffer[line_len] = '\0';
+    
+    increment_temp_line_index();
+    return buffer;
 }
 
 b32 str_end_with(char *str, const char *end_with){
@@ -328,8 +376,6 @@ String copy_string(String *str_to_copy){
     
     return new_string;
 }
-
-#define MEDIUM_STR_LEN 128
 
 struct Medium_Str{
     char data[MEDIUM_STR_LEN];  

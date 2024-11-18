@@ -6,6 +6,7 @@
 struct File{
     //When we will need to keep file open this will be changed
     //FILE *fptr;
+    b32 loaded = false;
     char name[MEDIUM_STR_LEN];
     Dynamic_Array<Long_Str> lines;
 };
@@ -41,6 +42,7 @@ File load_file(const char *name, const char *mode){
     
     if (fptr){
         fclose(fptr);
+        file.loaded = true;
     }
     
     return file;

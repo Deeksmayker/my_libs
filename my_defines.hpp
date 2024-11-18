@@ -20,4 +20,4 @@ typedef uint64_t u64;
 
 typedef u32 b32;
 
-#define For(container) for (auto it = (container).begin(); it != (container).end(); ++it)
+//#define For(container) for (auto it = (container).begin(); it != (container).end(); ++it)

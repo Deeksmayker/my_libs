@@ -92,6 +92,17 @@ struct Dynamic_Array{
         free(data);
     }
     
+    b32 contains(T to_found){
+        for (int i = 0; i < count; i++){
+            if (get(i) == to_found){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    
     // ~Array(){
     //     free(data);   
     // }
