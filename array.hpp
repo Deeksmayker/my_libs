@@ -4,7 +4,7 @@
 
 template<typename T>
 struct Dynamic_Array{
-    T *data;
+    T *data = NULL;
     int count = 0;
     int max_count = 0;
 
@@ -15,9 +15,9 @@ struct Dynamic_Array{
     }
     
     Dynamic_Array(){
-        max_count = 1;
+        max_count = 0;
         count = 0;
-        data = (T*)malloc(max_count * sizeof(T));
+        //data = (T*)malloc(max_count * sizeof(T));
     }
     
     T get(int index){
@@ -28,8 +28,13 @@ struct Dynamic_Array{
         return &data[index];
     }
     
-    void add(T value){
+    T* add(T value){
         //if (count >= max_count) return;
+        
+        if (max_count == 0){
+            max_count = 2;
+            data = (T*)malloc(max_count * sizeof(T));
+        }
         
         if (count >= max_count){     
             assert(max_count > 0);
@@ -51,6 +56,8 @@ struct Dynamic_Array{
         // mem_copy(element, value, sizeof(T));
         data[count] = value;
         count++;
+        
+        return last_ptr();
     }
     
     void remove(int index){
@@ -72,6 +79,16 @@ struct Dynamic_Array{
         //mem_copy(get_ptr(index), last_ptr(), sizeof(T));
         
         count--;
+    }
+    
+    int find(T to_find){
+        for (int i = 0; i < count; i++){ 
+            if (data[i] == to_find){
+                return i;
+            }
+        }
+        
+        return -1;
     }
     
     T last(){
@@ -127,10 +144,12 @@ struct Array{
         return &data[index];
     }
     
-    void add(T value){
+    T* add(T value){
         assert(count < max_count);     
         
         data[count++] = value;
+        
+        return last_ptr();
     }
     
     void remove(int index){

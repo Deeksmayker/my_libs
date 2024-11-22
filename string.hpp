@@ -112,6 +112,21 @@ void substring_after_line(char *line, const char *excluded){
     line[line_len - excluded_len] = '\0';
 }
 
+void substring_before_symbol(char *line, char symbol){
+    int start_index = 0;
+    
+    int line_len = str_len(line);
+    
+    int copy_len = str_find(line, symbol);
+    if (copy_len == line_len){
+        printf("EWATAHTELLL\n");
+    } else{
+        mem_copy(line, line, str_find(line, symbol) * sizeof(char));
+        line[copy_len] = '\0';
+    }
+}
+    
+
 char* get_substring_before_symbol(const char *line, char symbol){
     int start_index = 0;
     
@@ -168,6 +183,10 @@ b32 str_contains_const(const char *str, const char *contains){
     }    
     
     return match_count == contains_len;
+}
+
+b32 str_contains(char *str, const char *contains){
+    return str_contains_const(str, contains);
 }
 
 b32 str_contains(char *str, char *contains){
@@ -274,8 +293,8 @@ struct String{
         
         //+1 to safely put '\0' at end
         if (count + add_count + 1 > max_count){
+            char old_data[max_count];
             max_count *= 2;
-            char old_data[count];
             str_copy(old_data, data);
             free(data);
             
@@ -292,8 +311,8 @@ struct String{
     void operator+=(char ch){
         //+1 to safely put '\0' at end
         if (count + 2 > max_count){
+            char old_data[max_count];
             max_count *= 2;
-            char old_data[count];
             str_copy(old_data, data);
             free(data);
             

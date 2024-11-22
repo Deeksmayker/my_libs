@@ -239,15 +239,11 @@ f32 fangle(Vector2 v){
     return atan2f(v.x, v.y) * RAD2DEG;
 }
 
-// f32 min(f32 a, f32 b){
-//     if (a <= b) return a;
-//     return b;
-// }
-
-// f32 max(f32 a, f32 b){
-//     if (a >= b) return a;
-//     return b;
-// }
+Vector2 get_rotated_vector(Vector2 vec, f32 rotation){
+    f32 new_rotation = fangle(vec) + rotation;
+    vec = {sinf(new_rotation * DEG2RAD),  cosf(new_rotation * DEG2RAD)};
+    return vec;
+}
 
 void normalize(Vector2 *vector){
     //*vector = divide(*vector, magnitude(*vector));
