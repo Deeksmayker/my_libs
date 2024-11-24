@@ -337,13 +337,14 @@ struct Hash_Table_Int{
     }
     
     void clear(){
-        //count = 0;
-        
         for (int i = 0; i < max_count; i++){
             if (data[i].key != -1){
                 data[i].key = -1;
             }
         }
+        
+        total_added_count = 0;
+        last_added_key = -1;
     }
 };
 
