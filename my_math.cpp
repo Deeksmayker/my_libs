@@ -365,15 +365,30 @@ int lerp_gradient(Gradient gradient, float fraction){
 }
 
 //Hash functions
-i64 hash_str(char *line){
-    i64 hash = 5381;
-    int c;
+// i64 hash_str(char *line){
+//     i64 hash = 5381;
+//     int c;
 
+//     while ((c = *line++)){
+//         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+//     }
+
+//     return hash;
+// }
+
+i64 hash_str(char *line) {
+    const int p = 53;
+    const int m = 1e9 + 9;
+    i64 hash_value = 0;
+    i64 p_pow = 1;
+    
+    char c;
+    
     while ((c = *line++)){
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash_value = (hash_value + (c - 'a' + 1) * p_pow) % m;
+        p_pow = (p_pow * p) % m;
     }
-
-    return hash;
+    return hash_value;
 }
 
 //Ease functions
@@ -381,8 +396,12 @@ float EaseInOutQuad(float x){
     return x < 0.5f ? 2.0f * x * x : 1 - (f32)pow(-2 * x + 2, 2) / 2.0f;
 }
 
-float EaseOutQuint(float x){
+float EaseOutQuint(float x){ // strong sqrt(x)
     return 1.0f - pow(1.0f - x, 5);
+}
+
+f32 EaseOutExpo(f32 x) { // strongest sqrt(x)
+    return x == 1.0f ? 1.0f : 1.0f - pow(2.0f, -10.0f * x);
 }
 
 float EaseOutElastic(float x){
