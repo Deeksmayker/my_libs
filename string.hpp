@@ -293,6 +293,8 @@ struct String{
         
         //+1 to safely put '\0' at end
         if (count + add_count + 1 > max_count){
+            
+        
             char old_data[max_count];
             max_count *= 2;
             str_copy(old_data, data);
@@ -365,6 +367,7 @@ String init_string(){
     new_string.max_count = 16;
     
     new_string.data = (char*)malloc(new_string.max_count * sizeof(char));
+    new_string.data[0] = '\0';
     return new_string;
 }
 

@@ -376,7 +376,7 @@ int lerp_gradient(Gradient gradient, float fraction){
 //     return hash;
 // }
 
-i64 hash_str(char *line) {
+i64 hash_str(const char *line) {
     const int p = 53;
     const int m = 1e9 + 9;
     i64 hash_value = 0;
