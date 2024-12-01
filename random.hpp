@@ -47,3 +47,7 @@ Vector2 rnd_in_circle(){
     f32 theta = rnd01() * 2 * PI;
     return {r * cosf(theta), r * sinf(theta)};
 }
+
+Vector2 rnd_in_box(Vector2 box){
+    return {rnd(-box.x * 0.5f, box.x * 0.5f), rnd(-box.y * 0.5f, box.y * 0.5f)};
+}

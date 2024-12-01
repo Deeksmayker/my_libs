@@ -62,6 +62,10 @@ struct Color {
     Color operator+(Color other){
         return {(unsigned char)(r + other.r), (unsigned char)(g + other.g), (unsigned char)(b + other.b), (unsigned char)(a + other.a)};
     }
+    
+    b32 operator==(Color other){
+        return r == other.r && g == other.g && b == other.b && a == other.a;
+    }
 };
 
 #define LIGHTGRAY  (Color){ 200, 200, 200, 255 }   
