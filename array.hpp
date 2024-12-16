@@ -106,7 +106,9 @@ struct Dynamic_Array{
     }
     
     void free_arr(){
-        free(data);
+        if (data){
+            free(data);
+        }
     }
     
     b32 contains(T to_found){
