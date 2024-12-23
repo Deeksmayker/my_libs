@@ -118,7 +118,7 @@ void normalize(f32 *number){
     *number = -1;
 }
 
-f32 abs(f32 number){
+inline f32 abs(f32 number){
     if (number < 0) return -number;
     return number;
 }
@@ -234,13 +234,13 @@ f32 dot(Vector2 v1, Vector2 v2){
     return result;
 }
 
-f32 fangle(Vector2 v1, Vector2 v2){
+inline f32 fangle(Vector2 v1, Vector2 v2){
     return (acosf(dot(v1, v2) / (magnitude(v1) *  magnitude(v2)))) * RAD2DEG;
 }
 
-//angle of vector ({0, 1} it's 0)
-f32 fangle(Vector2 v){
+inline f32 fangle(Vector2 v){
     return atan2f(v.x, v.y) * RAD2DEG;
+    // return fangle(v, {1.0f, 0.0f});
 }
 
 Vector2 get_rotated_vector(Vector2 vec, f32 rotation){
@@ -408,13 +408,25 @@ f32 EaseOutExpo(f32 x) { // strongest sqrt(x)
     return x == 1.0f ? 1.0f : 1.0f - pow(2.0f, -10.0f * x);
 }
 
-float EaseOutElastic(float x){
+float EaseOutElastic(float x){ // elastic sqrt(x)
     float c4 = (2 * PI) / 3.0f;
     
     return x == 0 ? 0
       : (x == 1
       ? 1
       : pow(2.0f, -10 * x) * sin((x * 10 - 0.75f) * c4) + 1.0f);
+}
+
+f32 EaseInOutElastic(f32 x){
+    f32 c5 = (2.0f * PI) / 4.5f;
+    
+    return x == 0
+      ? 0
+      : x == 1
+      ? 1
+      : x < 0.5f
+      ? -(pow(2.0f, 20.0f * x - 10.0f) * sin((20.0f * x - 11.125f) * c5)) / 2.0f
+      : (pow(2.0f, -20.0f * x + 10.0f) * sin((20.0f * x - 11.125f) * c5)) / 2.0f + 1.0f;
 }
 
 f32 EaseInCirc(f32 x){
