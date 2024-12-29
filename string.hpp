@@ -132,10 +132,11 @@ char* get_substring_before_symbol(const char *line, char symbol){
     
     char *buffer = temp_lines[temp_line_index];
     
-    int line_len = str_len(line);
+    i32 symbol_index = str_find(line, symbol);
+    mem_copy(buffer, (void*)line, symbol_index * sizeof(char));
     
-    mem_copy(buffer, (void*)line, str_find(line, symbol) * sizeof(char));
-    buffer[line_len] = '\0';
+    // int line_len = str_len(line);
+    buffer[symbol_index] = '\0';
     
     increment_temp_line_index();
     return buffer;

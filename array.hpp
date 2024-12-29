@@ -147,9 +147,14 @@ struct Array{
     }
     
     T* add(T value){
-        assert(count < max_count);     
+        // assert(count < max_count);     
         
-        data[count++] = value;
+        if (count >= max_count){
+            print("WARNING: in static array was added more than YOU SHOULD DOG");
+            return NULL;
+        } else{
+            data[count++] = value;
+        }
         
         return last_ptr();
     }
