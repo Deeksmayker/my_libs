@@ -12,7 +12,7 @@ void increment_temp_line_index(){
 
 size_t str_len(const char *line){
     size_t result = 0;   
-    while (line[result]){
+    while (line && line[result]){
         result++;
     }
     
@@ -294,10 +294,11 @@ struct String{
         
         //+1 to safely put '\0' at end
         if (count + add_count + 1 > max_count){
-            
-        
             char old_data[max_count];
-            max_count *= 2;
+            
+            while (count + add_count + 1 > max_count){
+                max_count *= 2;
+            }
             str_copy(old_data, data);
             free(data);
             

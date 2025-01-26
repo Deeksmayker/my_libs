@@ -81,6 +81,14 @@ struct Dynamic_Array{
         count--;
     }
     
+    void remove_first_half(){
+        i32 half_count = (i32)((f32)count * 0.5f);
+        i32 even_correction = count % 2 == 0 ? -1 : 0;
+        mem_copy(get_ptr(0), get_ptr(half_count + even_correction), half_count * sizeof(T));
+        
+        count = half_count;
+    }
+    
     int find(T to_find){
         for (int i = 0; i < count; i++){ 
             if (data[i] == to_find){
