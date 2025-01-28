@@ -1,7 +1,7 @@
 #pragma once
 
-#define MEDIUM_STR_LEN 256
-#define MAX_TEMP_LINES 32
+#define MEDIUM_STR_LEN 1024
+#define MAX_TEMP_LINES 8
 
 global_variable char temp_lines[MAX_TEMP_LINES][MEDIUM_STR_LEN];
 global_variable int temp_line_index = 0;
@@ -37,16 +37,80 @@ void mem_copy(void *dest, void *source, size_t bytes){
     }
 }
 
+void mem_set(void *dest, u8 value, size_t bytes){
+    char *new_dest   = (char*)dest;
+    for (int i = 0; i < bytes; i++){
+        new_dest[i] = value;
+        //printf("%s\n", new_dest[i]);
+    }
+}
+
 void str_copy(char *dest, const char *source){
     int len = str_len(source);
     mem_copy((void*)dest, (void*)source, len * sizeof(char));
     dest[len] = '\0';
+}
 
-    // size_t bytes = str_len(source);
-    // for (size_t i = bytes; i > 0; --i){
-    //     dest[i - 1] = source[i - 1];
-    //     //printf("%s\n", new_dest[i]);
-    // }
+#include <stdarg.h>
+
+const char *text_format(const char *text, ...){
+    char *current_buffer = temp_lines[temp_line_index];
+    mem_set(current_buffer, 0, MEDIUM_STR_LEN);
+
+    va_list args;
+    va_start(args, text);
+    int requiredByteCount = vsnprintf(current_buffer, MEDIUM_STR_LEN, text, args);
+    va_end(args);
+
+    if (requiredByteCount >= MEDIUM_STR_LEN){
+        char *truncBuffer = current_buffer + MEDIUM_STR_LEN - 10;
+        sprintf(truncBuffer, "OVERFLOWW");
+    }
+
+    increment_temp_line_index();
+
+    return current_buffer;
+}
+
+i32 to_i32(const char *text){
+    i32 value = 0;
+    i32 sign = 1;
+
+    if (text[0] == '-') sign = -1;
+    while ((text[0] == '+') || (text[0] == '-'))
+    {
+        text++;
+    }
+
+    for (i32 i = 0; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10 + (i32)(text[i] - '0');
+
+    return value*sign;
+}
+
+f32 to_f32(const char *text){
+    f32 value = 0.0f;
+    f32 sign = 1.0f;
+
+    if (text[0] == '-') sign = -1.0f;
+    while ((text[0] == '+') || (text[0] == '-'))
+    {
+        text++;
+    }
+
+    i32 i = 0;
+    for (; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10.0f + (f32)(text[i] - '0');
+
+    if (text[i++] == '.')
+    {
+        f32 divisor = 10.0f;
+        for (; ((text[i] >= '0') && (text[i] <= '9')); i++)
+        {
+            value += ((f32)(text[i] - '0'))/divisor;
+            divisor = divisor*10.0f;
+        }
+    }
+
+    return value*sign;
 }
 
 inline char to_lower(char ch){

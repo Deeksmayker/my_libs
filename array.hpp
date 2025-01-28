@@ -117,6 +117,8 @@ struct Dynamic_Array{
         if (data){
             free(data);
         }
+        max_count = 0;
+        count = 0;
     }
     
     b32 contains(T to_found){
