@@ -1,10 +1,12 @@
 #pragma once
 
+#include <stdarg.h>
+
 #define MEDIUM_STR_LEN 1024
 #define MAX_TEMP_LINES 8
 
 global_variable char temp_lines[MAX_TEMP_LINES][MEDIUM_STR_LEN];
-global_variable int temp_line_index = 0;
+global_variable i32 temp_line_index = 0;
 
 void increment_temp_line_index(){
     temp_line_index = (temp_line_index + 1) % MAX_TEMP_LINES;   
@@ -41,7 +43,6 @@ void mem_set(void *dest, u8 value, size_t bytes){
     char *new_dest   = (char*)dest;
     for (int i = 0; i < bytes; i++){
         new_dest[i] = value;
-        //printf("%s\n", new_dest[i]);
     }
 }
 
@@ -49,68 +50,12 @@ void str_copy(char *dest, const char *source){
     int len = str_len(source);
     mem_copy((void*)dest, (void*)source, len * sizeof(char));
     dest[len] = '\0';
-}
 
-#include <stdarg.h>
-
-const char *text_format(const char *text, ...){
-    char *current_buffer = temp_lines[temp_line_index];
-    mem_set(current_buffer, 0, MEDIUM_STR_LEN);
-
-    va_list args;
-    va_start(args, text);
-    int requiredByteCount = vsnprintf(current_buffer, MEDIUM_STR_LEN, text, args);
-    va_end(args);
-
-    if (requiredByteCount >= MEDIUM_STR_LEN){
-        char *truncBuffer = current_buffer + MEDIUM_STR_LEN - 10;
-        sprintf(truncBuffer, "OVERFLOWW");
-    }
-
-    increment_temp_line_index();
-
-    return current_buffer;
-}
-
-i32 to_i32(const char *text){
-    i32 value = 0;
-    i32 sign = 1;
-
-    if (text[0] == '-') sign = -1;
-    while ((text[0] == '+') || (text[0] == '-'))
-    {
-        text++;
-    }
-
-    for (i32 i = 0; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10 + (i32)(text[i] - '0');
-
-    return value*sign;
-}
-
-f32 to_f32(const char *text){
-    f32 value = 0.0f;
-    f32 sign = 1.0f;
-
-    if (text[0] == '-') sign = -1.0f;
-    while ((text[0] == '+') || (text[0] == '-'))
-    {
-        text++;
-    }
-
-    i32 i = 0;
-    for (; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10.0f + (f32)(text[i] - '0');
-
-    if (text[i++] == '.')
-    {
-        f32 divisor = 10.0f;
-        for (; ((text[i] >= '0') && (text[i] <= '9')); i++)
-        {
-            value += ((f32)(text[i] - '0'))/divisor;
-            divisor = divisor*10.0f;
-        }
-    }
-
-    return value*sign;
+    // size_t bytes = str_len(source);
+    // for (size_t i = bytes; i > 0; --i){
+    //     dest[i - 1] = source[i - 1];
+    //     //printf("%s\n", new_dest[i]);
+    // }
 }
 
 inline char to_lower(char ch){
@@ -195,6 +140,7 @@ char* get_substring_before_symbol(const char *line, char symbol){
     int start_index = 0;
     
     char *buffer = temp_lines[temp_line_index];
+    buffer[0] = 0;
     
     i32 symbol_index = str_find(line, symbol);
     mem_copy(buffer, (void*)line, symbol_index * sizeof(char));
@@ -223,7 +169,7 @@ b32 str_end_with(char *str, const char *end_with){
     return true;
 }
 
-b32 str_contains_const(const char *str, const char *contains){
+b32 str_contains(const char *str, const char *contains){
     size_t len = str_len(str);
     size_t contains_len = str_len(contains);
     
@@ -250,36 +196,13 @@ b32 str_contains_const(const char *str, const char *contains){
     return match_count == contains_len;
 }
 
-b32 str_contains(char *str, const char *contains){
-    return str_contains_const(str, contains);
-}
+// b32 str_contains(const char *str, const char *contains){
+//     return str_contains_const(str, contains);
+// }
 
-b32 str_contains(char *str, char *contains){
-    return str_contains_const(str, contains);
-    // size_t len = str_len(str);
-    // size_t contains_len = str_len(contains);
-    
-    // size_t match_count = 0;
-    // //b32 found_first_char = false;
-    
-    // if (contains_len > len){
-    //     return false;
-    // }
-    
-    // for (int i = 0; i < len; i++){
-    //     if (match_count == 0 && len - i > contains_len){
-    //         return false;
-    //     }
-    
-    //     if (to_lower(str[i]) == to_lower(contains[match_count])){
-    //         match_count++;
-    //     } else if (match_count > 0){
-    //         return false;
-    //     }
-    // }    
-    
-    // return match_count == contains_len;
-}
+// b32 str_contains(char *str, char *contains){
+//     return str_contains_const(str, contains);
+// }
 
 b32 str_equal(char *first, const char *second){
     int len1 = str_len(first);
@@ -320,6 +243,67 @@ b32 str_equal(const char *first, char *second){
     return true;
 }
 
+const char *text_format(const char *text, ...){
+    char *current_buffer = temp_lines[temp_line_index];
+    // mem_set(current_buffer, 0, MEDIUM_STR_LEN);
+    current_buffer[0] = 0;
+    
+    va_list args;
+    va_start(args, text);
+    i32 byte_count = vsnprintf(current_buffer, MEDIUM_STR_LEN, text, args);
+    va_end(args);
+    
+    if (byte_count >= MEDIUM_STR_LEN){
+        char *trunc_buffer = current_buffer + MEDIUM_STR_LEN - 10;
+        sprintf(trunc_buffer, "OVERFLOWW");
+    }
+    
+    increment_temp_line_index();
+    
+    return current_buffer;
+}
+
+i32 to_i32(const char *text){
+    i32 value = 0;
+    i32 sign = 1;
+    
+    if (text[0] == '-') sign = -1;
+    while ((text[0] == '+') || (text[0] == '-')){
+        text++;
+    }
+    
+    for (i32 i = 0; ((text[i] >= '0') && (text[i] <= '9')); i++){
+        value = value * 10 + (i32)(text[i] - '0');
+    }
+    
+    return value * sign;
+}
+
+f32 to_f32(const char *text){
+    f32 value = 0.0f;
+    f32 sign = 1.0f;
+    
+    if (text[0] == '-') sign = -1.0f;
+    while (text[0] == '+' || text[0] == '-'){
+        text++;
+    }
+    
+    i32 i = 0;
+    for (; (text[i] >= '0' && text[i] <= '9'); i++){
+        value = value * 10.0f + (f32)(text[i] - '0');
+    }
+    
+    if (text[i++] == '.'){
+        f32 divisor = 10.0f;
+        for (; text[i] >= '0' && text[i] <= '9'; i++){
+            value += ((f32)(text[i] - '0')) / divisor;
+            divisor *= 10;
+        }
+    }
+    
+    return value * sign;
+}
+
 struct String{
     // String(const char *_data){  
     //     count = str_len(_data);
@@ -350,11 +334,17 @@ struct String{
     // }
     
     char *data;
-    size_t count;
-    size_t max_count;
+    size_t count = 0;
+    size_t max_count = 0;
     
     void operator+=(const char *add_str){
         size_t add_count = str_len(add_str);
+        
+        if (max_count == 0){
+            max_count = add_count + 1;           
+            data = (char*)malloc(max_count * sizeof(char));
+            data[0] = 0;
+        }
         
         //+1 to safely put '\0' at end
         if (count + add_count + 1 > max_count){
