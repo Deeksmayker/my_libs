@@ -392,7 +392,7 @@ i64 hash_str(const char *line) {
         hash_value = (hash_value + (c - 'a' + 1) * p_pow) % m;
         p_pow = (p_pow * p) % m;
     }
-    return hash_value;
+    return abs(hash_value);
 }
 
 //Ease functions

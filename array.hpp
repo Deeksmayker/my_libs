@@ -237,7 +237,7 @@ struct Hash_Table_Int{
     i64 last_added_key = -1;
 
     Hash_Table_Int(int count = 10000){
-        max_count = 10000;
+        max_count = count;
         
         data = (Table_Data<T>*)malloc(max_count * sizeof(Table_Data<T>));
 

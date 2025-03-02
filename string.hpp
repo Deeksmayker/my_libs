@@ -3,7 +3,7 @@
 #include <stdarg.h>
 
 #define MEDIUM_STR_LEN 1024
-#define MAX_TEMP_LINES 8
+#define MAX_TEMP_LINES 16
 
 global_variable char temp_lines[MAX_TEMP_LINES][MEDIUM_STR_LEN];
 global_variable i32 temp_line_index = 0;
