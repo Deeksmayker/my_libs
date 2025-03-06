@@ -305,34 +305,6 @@ f32 to_f32(const char *text){
 }
 
 struct String{
-    // String(const char *_data){  
-    //     count = str_len(_data);
-    //     max_count = count;
-        
-    //     if (max_count < 16){
-    //         max_count = 16;
-    //     }
-        
-    //     data = (char*)malloc(max_count * sizeof(char));
-        
-    //     str_copy(data, _data);
-    // }
-    
-    // String(){  
-    //     count = 0;
-    //     max_count = 16;
-        
-    //     data = (char*)malloc(max_count * sizeof(char));
-    // }
-    
-    // String(String *str_to_copy){
-    //     count = str_to_copy->count;
-    //     max_count = str_to_copy->max_count;
-        
-    //     data = (char*)malloc(max_count * sizeof(char));
-    //     str_copy(data, str_to_copy->data);
-    // }
-    
     char *data;
     size_t count = 0;
     size_t max_count = 0;
@@ -348,17 +320,17 @@ struct String{
         
         //+1 to safely put '\0' at end
         if (count + add_count + 1 > max_count){
-            char old_data[max_count];
+            char *old_data = data;
             
             while (count + add_count + 1 > max_count){
                 max_count *= 2;
             }
             str_copy(old_data, data);
-            free(data);
             
             data = (char*)malloc(max_count * sizeof(char));
             
             str_copy(data, old_data);
+            free(old_data);
         }
         
         str_copy(data + count, add_str);
@@ -369,14 +341,14 @@ struct String{
     void operator+=(char ch){
         //+1 to safely put '\0' at end
         if (count + 2 > max_count){
-            char old_data[max_count];
+            char *old_data = data;
             max_count *= 2;
             str_copy(old_data, data);
-            free(data);
             
             data = (char*)malloc(max_count * sizeof(char));
             
             str_copy(data, old_data);
+            free(old_data);
         }
         
         data[count] = ch;

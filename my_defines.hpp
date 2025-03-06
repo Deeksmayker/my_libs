@@ -20,4 +20,6 @@ typedef uint64_t u64;
 
 typedef u32 b32;
 
+#define cast(type) type
+
 //#define For(container) for (auto it = (container).begin(); it != (container).end(); ++it)
