@@ -41,10 +41,8 @@ struct Dynamic_Array{
         
             max_count *= 2;
             
-            T *old_data = (T*)malloc(count * sizeof(T));
-            
-            mem_copy(old_data, data, count * sizeof(T));
-            free(data);
+            T *old_data = data;//(T*)malloc(count * sizeof(T));
+            // mem_copy(old_data, data, count * sizeof(T));
             
             data = (T*)malloc(max_count * sizeof(T));
             mem_copy(data, old_data, count * sizeof(T));
