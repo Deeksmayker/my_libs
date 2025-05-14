@@ -279,6 +279,22 @@ i32 to_i32(const char *text){
     return value * sign;
 }
 
+u64 to_u64(const char *text){
+    u64 value = 0;
+    u64 sign = 1;
+    
+    if (text[0] == '-') sign = -1;
+    while ((text[0] == '+') || (text[0] == '-')){
+        text++;
+    }
+    
+    for (u64 i = 0; ((text[i] >= '0') && (text[i] <= '9')); i++){
+        value = value * 10 + (u64)(text[i] - '0');
+    }
+    
+    return value * sign;
+}
+
 f32 to_f32(const char *text){
     f32 value = 0.0f;
     f32 sign = 1.0f;
