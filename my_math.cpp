@@ -151,6 +151,13 @@ f32 clamp01(f32 value){
     return clamp(value, 0.0f, 1.0f);
 }
 
+void clamp(i32 *value, i32 min, i32 max){
+    if (*value <= min){
+        *value = min;
+    } else if (*value >= max){
+        *value = max;
+    }
+}
 void clamp(f32 *value, f32 min, f32 max){
     if (*value <= min){
         *value = min;
