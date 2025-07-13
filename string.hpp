@@ -243,7 +243,7 @@ b32 str_equal(const char *first, char *second){
     return true;
 }
 
-const char *text_format(const char *text, ...){
+const char *tprintf(const char *text, ...){
     char *current_buffer = temp_lines[temp_line_index];
     // mem_set(current_buffer, 0, MEDIUM_STR_LEN);
     current_buffer[0] = 0;
