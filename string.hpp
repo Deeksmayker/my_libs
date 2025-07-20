@@ -107,6 +107,46 @@ int str_find(const char *line, char symbol){
     return line_len;
 }
 
+i32 get_index_of_substring_start(const char *line, const char *substring){
+    size_t line_length = str_len(line);
+    size_t substring_length = str_len(substring);
+    
+    if (substring_length > line_length) return -1;
+    
+    i32 substring_start_index = -1;
+    i32 found_substring_in_line_count = 0;
+    
+    for (i32 i = 0; i < line_length; i++) {
+        if (substring_start_index == -1 && line[i] == substring[found_substring_in_line_count]) {
+            substring_start_index = i;
+            found_substring_in_line_count = 1;
+            continue;
+        }
+        
+        if (substring_start_index >= 0) {
+            if (substring[found_substring_in_line_count] == line[i]) {
+                found_substring_in_line_count += 1;
+                
+                if (found_substring_in_line_count >= substring_length) {
+                    assert(found_substring_in_line_count == substring_length);
+                    break;
+                }
+            } else {
+                substring_start_index = -1;
+                found_substring_in_line_count = 0;
+            }
+        }
+    }
+    
+    if (found_substring_in_line_count >= substring_length) {
+        assert(found_substring_in_line_count == substring_length);
+        assert(substring_start_index > -1);        
+        return substring_start_index;
+    } else {
+        return -1;
+    }
+}
+
 void substring_after_line(char *line, const char *excluded){
     int start_index = 0;
     
@@ -119,6 +159,13 @@ void substring_after_line(char *line, const char *excluded){
     
     mem_copy(line, line + excluded_len, (line_len - excluded_len) * sizeof(char));
     line[line_len - excluded_len] = '\0';
+}
+void substring_before_line(char *line, const char *excluded){
+    i32 i = get_index_of_substring_start(line, excluded);
+    
+    if (i > -1) {
+        line[i] = '\0';
+    }
 }
 
 void substring_before_symbol(char *line, char symbol){
