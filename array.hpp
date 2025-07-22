@@ -158,7 +158,7 @@ struct Array{
         // assert(count < max_count);     
         
         if (count >= max_count){
-            print("WARNING: in static array was added more than YOU SHOULD DOG");
+            printf("WARNING: in static array was added more than YOU SHOULD DOG\n");
             return NULL;
         } else{
             data[count++] = value;
@@ -331,17 +331,17 @@ struct Hash_Table_Int{
         return true;
     }
     
-    T pop(){
-        assert(count > 0);
+    // T pop(){
+    //     assert(count > 0);
     
-        return data[--count];
-    }
+    //     return data[--count];
+    // }
     
-    T* pop_ptr(){
-        assert(count > 0);
+    // T* pop_ptr(){
+    //     assert(count > 0);
     
-        return &data[--count];
-    }
+    //     return &data[--count];
+    // }
     
     T last(){
         return data[last_added_key%max_count].value;

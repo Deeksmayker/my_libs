@@ -367,30 +367,31 @@ f32 to_f32(const char *text){
     return value * sign;
 }
 
-struct String{
+struct String {
+    Allocator *allocator = NULL;
     char *data;
     size_t count = 0;
-    size_t max_count = 0;
+    size_t capacity = 0;
     
     void operator+=(const char *add_str){
         size_t add_count = str_len(add_str);
         
-        if (max_count == 0){
-            max_count = add_count + 1;           
-            data = (char*)malloc(max_count * sizeof(char));
+        if (capacity == 0){
+            capacity = add_count + 1;           
+            data = (char*)malloc(capacity * sizeof(char));
             data[0] = 0;
         }
         
         //+1 to safely put '\0' at end
-        if (count + add_count + 1 > max_count){
+        if (count + add_count + 1 > capacity){
             char *old_data = data;
             
-            while (count + add_count + 1 > max_count){
-                max_count *= 2;
+            while (count + add_count + 1 > capacity){
+                capacity *= 2;
             }
             str_copy(old_data, data);
             
-            data = (char*)malloc(max_count * sizeof(char));
+            data = (char*)malloc(capacity * sizeof(char));
             
             str_copy(data, old_data);
             free(old_data);
@@ -403,12 +404,12 @@ struct String{
     
     void operator+=(char ch){
         //+1 to safely put '\0' at end
-        if (count + 2 > max_count){
+        if (count + 2 > capacity){
             char *old_data = data;
-            max_count *= 2;
+            capacity *= 2;
             str_copy(old_data, data);
             
-            data = (char*)malloc(max_count * sizeof(char));
+            data = (char*)malloc(capacity * sizeof(char));
             
             str_copy(data, old_data);
             free(old_data);
@@ -447,17 +448,41 @@ struct String{
     }
     
     void free_str(){
-        free(data);
-        count = 0;
+        // If allocator is persist we don't free that one because Allocator is just arena for the time being.
+        if (!allocator){
+            free(data);
+            count = 0;
+        }
     }
 };
+
+String S(Allocator *allocator, const char *text, ...){
+    String result_string = {.allocator = allocator};
+    alloc(result_string.allocator, 4096);
+    
+    va_list args;
+    va_start(args, text);
+    i32 byte_count = vsnprintf(result_string.data, 4096, text, args);
+    va_end(args);
+    
+    if (byte_count >= 4096){
+        char *trunc_buffer = result_string.data + 4096 - 10;
+        sprintf(trunc_buffer, "OVERFLOWW");
+    }
+    
+    return result_string;
+}
+
+String S() {
+    return {0};
+}
 
 String init_string(){  
     String new_string;
     new_string.count = 0;
-    new_string.max_count = 16;
+    new_string.capacity = 16;
     
-    new_string.data = (char*)malloc(new_string.max_count * sizeof(char));
+    new_string.data = (char*)malloc(new_string.capacity * sizeof(char));
     new_string.data[0] = '\0';
     return new_string;
 }
@@ -465,13 +490,13 @@ String init_string(){
 String init_string_from_str(const char *_data){
     String new_string;
     new_string.count = str_len(_data);
-    new_string.max_count = new_string.count;
+    new_string.capacity = new_string.count;
     
-    if (new_string.max_count < 16){
-        new_string.max_count = 16;
+    if (new_string.capacity < 16){
+        new_string.capacity = 16;
     }
     
-    new_string.data = (char*)malloc(new_string.max_count * sizeof(char));
+    new_string.data = (char*)malloc(new_string.capacity * sizeof(char));
     
     str_copy(new_string.data, _data);
     
@@ -482,9 +507,9 @@ String copy_string(String *str_to_copy){
     String new_string;
 
     new_string.count = str_to_copy->count;
-    new_string.max_count = str_to_copy->max_count;
+    new_string.capacity = str_to_copy->capacity;
     
-    new_string.data = (char*)malloc(new_string.max_count * sizeof(char));
+    new_string.data = (char*)malloc(new_string.capacity * sizeof(char));
     str_copy(new_string.data, str_to_copy->data);
     
     return new_string;
@@ -496,6 +521,55 @@ struct Medium_Str{
 
 #define LONG_STR_LEN 2048
 
-struct Long_Str{
+struct Long_Str {
     char data[LONG_STR_LEN];  
 };
+
+
+struct String_Builder {
+    Allocator *allocator = NULL;  
+    
+    char *data = NULL;
+    i32 count = 0;
+    i32 capacity = 0;
+};
+
+void builder_init(String_Builder *builder, i32 capacity) {
+    assert(!builder->data);
+    assert(builder->capacity == 0);
+    builder->data = alloc(builder->allocator, capacity);
+    builder->capacity = capacity;
+}
+
+// @TODO: I would like to get rid of null ternimation on strings, but while we working with Raylib that would be to harsh of a job.
+static inline void builder_grow_if_need(String_Builder *builder, String *appended_string) {
+    assert(builder->data && builder->capacity > 0);
+    
+    if (builder->count + appended_string->count + 1 > builder->capacity) {
+        char *old_data = builder->data;
+        
+        while(builder->count + appended_string->count + 1 > builder->capacity) {
+            builder->capacity *= 2;
+        }
+        
+        builder->data = alloc(builder->allocator, builder->capacity);
+        mem_copy(builder->data, old_data, builder->count * sizeof(char));
+        
+        free_data_in_allocator(builder->allocator, old_data);
+    }
+}
+
+void builder_append(String_Builder *builder, String appended_string) {
+    if (!builder->data) builder_init(builder, 16384);
+    
+    builder_grow_if_need(builder, &appended_string);    
+    
+    mem_copy(builder->data + builder->count, appended_string.data, appended_string.count * sizeof(char));
+    builder->count += appended_string.count;
+    builder->data[builder->count] = '\0';
+}
+
+void builder_free(String_Builder *builder) {
+    assert(builder->data);
+    free_data_in_allocator(builder->allocator, builder->data);
+}
