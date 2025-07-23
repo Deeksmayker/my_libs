@@ -22,4 +22,7 @@ typedef u32 b32;
 
 #define cast(type) type
 
+#define Kilobytes(x)   ((size_t) (x) << 10)
+#define Megabytes(x)   ((size_t) (x) << 20)
+
 //#define For(container) for (auto it = (container).begin(); it != (container).end(); ++it)

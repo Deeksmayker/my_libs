@@ -456,19 +456,40 @@ struct String {
     }
 };
 
-String S(Allocator *allocator, const char *text, ...){
+String make_string(Allocator *allocator, const char *text, ...){
     String result_string = {.allocator = allocator};
-    alloc(result_string.allocator, 4096);
+    result_string.data = alloc(result_string.allocator, 1024);
     
     va_list args;
     va_start(args, text);
-    i32 byte_count = vsnprintf(result_string.data, 4096, text, args);
+    i32 byte_count = vsnprintf(result_string.data, 1024, text, args);
     va_end(args);
     
-    if (byte_count >= 4096){
-        char *trunc_buffer = result_string.data + 4096 - 10;
+    if (byte_count >= 1024){
+        char *trunc_buffer = result_string.data + 1024 - 10;
         sprintf(trunc_buffer, "OVERFLOWW");
     }
+    
+    result_string.count = byte_count;
+    
+    return result_string;
+}
+
+String temp_string(const char *text, ...) {
+    String result_string = {.allocator = &temp_allocator};
+    result_string.data = alloc(result_string.allocator, 1024);
+    
+    va_list args;
+    va_start(args, text);
+    i32 byte_count = vsnprintf(result_string.data, 1024, text, args);
+    va_end(args);
+    
+    if (byte_count >= 1024){
+        char *trunc_buffer = result_string.data + 1024 - 10;
+        sprintf(trunc_buffer, "OVERFLOWW");
+    }
+    
+    result_string.count = byte_count;
     
     return result_string;
 }
